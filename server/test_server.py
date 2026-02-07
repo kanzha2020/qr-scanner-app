@@ -48,6 +48,23 @@ def test_index_contains_key_elements(client):
     assert "/api/health" in html
 
 
+def test_index_uses_inline_map_instead_of_modal(client):
+    """The dashboard should display inline maps, not a modal popup."""
+    resp = client.get("/")
+    html = resp.data.decode()
+    # Inline map CSS classes should be present
+    assert "inline-map" in html
+    assert "inline-map-coords" in html
+    assert "inline-map-link" in html
+    # The old modal elements should be removed
+    assert "map-modal-overlay" not in html
+    assert "map-modal-close" not in html
+    assert "showMap(" not in html
+    assert "closeMapModal" not in html
+    # The old location-link clickable span should be gone
+    assert "location-link" not in html
+
+
 # ── API smoke tests ──────────────────────────────────────────
 
 def test_health_endpoint(client):
