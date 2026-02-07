@@ -207,7 +207,7 @@ class MainActivity : AppCompatActivity() {
                 timeZone = TimeZone.getTimeZone("UTC")
             }.format(Date())
 
-            val deviceId = getDeviceId()
+            val deviceId = getCustomDeviceId()
 
             val scanResult = ScanResult(
                 qrContent = qrContent,
@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("HardwareIds")
-    private fun getDeviceId(): String {
+    private fun getCustomDeviceId(): String {
         val androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         return "XCover7Pro_${androidId.takeLast(6)}"
     }
