@@ -208,3 +208,11 @@ __marimo__/
 
 # Test cache
 .pytest_cache/
+
+# Android / Gradle build artifacts
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+*.apk
+*.aab
