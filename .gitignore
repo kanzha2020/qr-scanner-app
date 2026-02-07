@@ -216,3 +216,6 @@ android/app/build/
 android/local.properties
 *.apk
 *.aab
+
+# SQLite database files
+*.db

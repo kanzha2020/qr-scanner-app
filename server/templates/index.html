@@ -149,6 +149,73 @@
 
         .loading { text-align: center; padding: 32px; color: #888; }
 
+        .location-link {
+            color: #1a73e8;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .location-link:hover { color: #1558b0; }
+
+        .map-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .map-modal-overlay.active { display: flex; }
+
+        .map-modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .map-modal h3 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .map-modal .map-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .map-modal .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .map-modal .map-actions {
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .map-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #888;
+        }
+        .map-modal-close:hover { color: #333; }
+
         @media (max-width: 640px) {
             th:nth-child(4), td:nth-child(4),
             th:nth-child(5), td:nth-child(5) { display: none; }
@@ -199,6 +266,21 @@
 
     <!-- Pagination -->
     <div class="pagination" id="pagination"></div>
+</div>
+
+<!-- Map Modal -->
+<div class="map-modal-overlay" id="map-modal-overlay" onclick="closeMapModal(event)">
+    <div class="map-modal">
+        <button class="map-modal-close" onclick="closeMapModal()">&times;</button>
+        <h3 id="map-modal-title">📍 Scan Location</h3>
+        <div class="map-container">
+            <iframe id="map-iframe" src="" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="map-actions">
+            <span id="map-coords" style="color:#888;font-size:0.85rem;"></span>
+            <a id="map-link" href="#" target="_blank" class="btn btn-primary" style="font-size:0.85rem;">Open in Google Maps</a>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -263,7 +345,8 @@
                     "<td>" + s.id + "</td>" +
                     "<td class='qr-content' title='" + escapeHtml(s.qr_content) + "'>" + escapeHtml(s.qr_content) + "</td>" +
                     "<td>" + escapeHtml(s.device_id || "–") + "</td>" +
-                    "<td>" + s.latitude.toFixed(4) + ", " + s.longitude.toFixed(4) + "</td>" +
+                    "<td><span class='location-link' onclick='showMap(" + s.latitude + "," + s.longitude + ")'>" +
+                        s.latitude.toFixed(4) + ", " + s.longitude.toFixed(4) + "</span></td>" +
                     "<td>" + new Date(s.scan_time).toLocaleString() + "</td>" +
                     "</tr>";
             });
@@ -326,6 +409,27 @@
         currentPage = 0;
         loadScans();
     });
+
+    // Map modal
+    function showMap(lat, lng) {
+        var overlay = document.getElementById("map-modal-overlay");
+        var iframe = document.getElementById("map-iframe");
+        var coords = document.getElementById("map-coords");
+        var link = document.getElementById("map-link");
+
+        iframe.src = "https://maps.google.com/maps?q=" + lat + "," + lng + "&z=15&output=embed";
+        coords.textContent = lat.toFixed(6) + ", " + lng.toFixed(6);
+        link.href = "https://www.google.com/maps?q=" + lat + "," + lng;
+        overlay.classList.add("active");
+    }
+
+    function closeMapModal(event) {
+        if (event && event.target !== document.getElementById("map-modal-overlay")) return;
+        var overlay = document.getElementById("map-modal-overlay");
+        var iframe = document.getElementById("map-iframe");
+        overlay.classList.remove("active");
+        iframe.src = "";
+    }
 
     // Init
     checkHealth();
