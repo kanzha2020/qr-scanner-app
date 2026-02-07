@@ -163,11 +163,6 @@
             display: block;
         }
 
-        .inline-map-coords {
-            font-size: 0.82rem;
-            color: #555;
-        }
-
         .inline-map-link {
             display: inline-block;
             margin-top: 4px;
@@ -252,10 +247,8 @@
         lat = parseFloat(lat);
         lng = parseFloat(lng);
         if (isNaN(lat) || isNaN(lng)) return "–";
-        var coords = lat.toFixed(4) + ", " + lng.toFixed(4);
         var q = encodeURIComponent(lat + "," + lng);
-        return "<div class='inline-map-coords'>" + coords + "</div>" +
-            "<div class='inline-map'><iframe src='https://maps.google.com/maps?q=" + q + "&amp;z=15&amp;output=embed' allowfullscreen loading='lazy'></iframe></div>" +
+        return "<div class='inline-map'><iframe src='https://maps.google.com/maps?q=" + q + "&amp;z=15&amp;output=embed' allowfullscreen loading='lazy'></iframe></div>" +
             "<a class='inline-map-link' href='https://www.google.com/maps?q=" + q + "' target='_blank' rel='noopener noreferrer'>Open in Google Maps ↗</a>";
     }
 
