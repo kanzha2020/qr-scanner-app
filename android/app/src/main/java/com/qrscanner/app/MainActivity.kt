@@ -158,8 +158,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Early global cooldown check: skip scanning entirely if within cooldown
-        val earlyNow = System.currentTimeMillis()
-        if ((earlyNow - lastScanTime) < GLOBAL_SCAN_COOLDOWN_MS) {
+        val currentTimeMs = System.currentTimeMillis()
+        if ((currentTimeMs - lastScanTime) < GLOBAL_SCAN_COOLDOWN_MS) {
             imageProxy.close()
             return
         }
@@ -182,7 +182,8 @@ class MainActivity : AppCompatActivity() {
                             continue
                         }
 
-                        // Global cooldown: skip if any QR was scanned too recently
+                        // Re-check global cooldown inside async callback in case
+                        // another scan was processed while ML Kit was running
                         if ((now - lastScanTime) < GLOBAL_SCAN_COOLDOWN_MS) {
                             continue
                         }
