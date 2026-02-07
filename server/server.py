@@ -31,6 +31,9 @@ CORS(app)  # Allow cross-origin requests
 
 DB_PATH = os.environ.get("DB_PATH", "qr_scans.db")
 
+# Server-side duplicate detection window (in seconds)
+DUPLICATE_WINDOW_SECONDS = int(os.environ.get("DUPLICATE_WINDOW_SECONDS", 5))
+
 
 def get_db():
     """Get a database connection with row factory."""
@@ -97,6 +100,28 @@ def upload_scan():
 
     # Store in database
     conn = get_db()
+
+    # Server-side duplicate detection: reject if the same device sent the same
+    # QR content within the deduplication window.
+    device_id = data.get("device_id", "unknown")
+    duplicate = conn.execute(
+        """
+        SELECT id FROM scans
+        WHERE qr_content = ? AND device_id = ?
+              AND received_at >= datetime('now', ? || ' seconds')
+        ORDER BY id DESC LIMIT 1
+        """,
+        (data["qr_content"], device_id, -DUPLICATE_WINDOW_SECONDS),
+    ).fetchone()
+
+    if duplicate is not None:
+        conn.close()
+        return jsonify({
+            "status": "duplicate",
+            "message": "Duplicate scan detected; ignoring.",
+            "id": duplicate["id"],
+        }), 200
+
     cursor = conn.execute(
         """
         INSERT INTO scans (qr_content, latitude, longitude, scan_time, device_id, received_at, ip_address)
@@ -107,7 +132,7 @@ def upload_scan():
             float(data["latitude"]),
             float(data["longitude"]),
             data["scan_time"],
-            data.get("device_id", "unknown"),
+            device_id,
             datetime.utcnow().isoformat() + "Z",
             request.remote_addr,
         ),
