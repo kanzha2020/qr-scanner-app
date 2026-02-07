@@ -308,19 +308,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showConfirmationDialog(scanResult: ScanResult, response: ScanResponse?) {
         runOnUiThread {
-            val lat = scanResult.latitude
-            val lng = scanResult.longitude
-
             val message = """
-                QR Content: ${scanResult.qrContent}
-                
-                Location: ${String.format("%.6f", lat)}, ${String.format("%.6f", lng)}
-                
                 Time: ${scanResult.scanTime}
                 
                 Server ID: ${response?.id ?: "N/A"}
-                
-                📍 View location on the QR Scanner Dashboard.
             """.trimIndent()
 
             AlertDialog.Builder(this)
