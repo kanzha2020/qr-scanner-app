@@ -166,12 +166,12 @@ def list_scans():
 
     if device_id:
         rows = conn.execute(
-            "SELECT * FROM scans WHERE device_id = ? ORDER BY id DESC LIMIT ? OFFSET ?",
+            "SELECT * FROM scans WHERE device_id = ? ORDER BY scan_time DESC LIMIT ? OFFSET ?",
             (device_id, limit, offset),
         ).fetchall()
     else:
         rows = conn.execute(
-            "SELECT * FROM scans ORDER BY id DESC LIMIT ? OFFSET ?",
+            "SELECT * FROM scans ORDER BY scan_time DESC LIMIT ? OFFSET ?",
             (limit, offset),
         ).fetchall()
 
@@ -198,7 +198,7 @@ def get_scan(scan_id):
 def export_csv():
     """Export all scans as a CSV file."""
     conn = get_db()
-    rows = conn.execute("SELECT * FROM scans ORDER BY id DESC").fetchall()
+    rows = conn.execute("SELECT * FROM scans ORDER BY scan_time DESC").fetchall()
     conn.close()
 
     output = io.StringIO()
