@@ -9,6 +9,29 @@ A multi-platform QR code scanner with a cloud backend. The Android app captures 
 - **Docker & Docker Compose** (optional, for containerised deployment)
 - **Android Studio** (optional, for building the Android app)
 
+## How to Set Up Environment
+
+1. **Install Miniforge** — Download and install [Miniforge](https://github.com/conda-forge/miniforge) for your operating system.
+
+2. **Create a virtual environment** with Python 3.12:
+
+   ```bash
+   conda create -n qr-scanner python=3.12 -y
+   ```
+
+3. **Activate the environment:**
+
+   ```bash
+   conda activate qr-scanner
+   ```
+
+4. **Install project dependencies:**
+
+   ```bash
+   cd server
+   pip install -r requirements.txt
+   ```
+
 ## Launching the Server
 
 ### Option 1 — Run locally
