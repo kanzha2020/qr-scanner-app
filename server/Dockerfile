@@ -6,6 +6,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY server.py .
+COPY templates/ templates/
 
 # Store database in a volume-friendly location
 ENV DB_PATH=/app/data/qr_scans.db
