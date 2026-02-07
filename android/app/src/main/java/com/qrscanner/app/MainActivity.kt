@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         private const val TAG = "QRScanner"
         private const val PERMISSION_REQUEST_CODE = 100
         private const val SCAN_COOLDOWN_MS = 3000L  // 3-second cooldown between same QR scans
+        private const val GLOBAL_SCAN_COOLDOWN_MS = 1500L  // 1.5-second cooldown between any scans
 
         private val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,
@@ -156,6 +157,13 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        // Early global cooldown check: skip scanning entirely if within cooldown
+        val currentTimeMs = System.currentTimeMillis()
+        if ((currentTimeMs - lastScanTime) < GLOBAL_SCAN_COOLDOWN_MS) {
+            imageProxy.close()
+            return
+        }
+
         val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
         val scanner = BarcodeScanning.getClient()
 
@@ -171,6 +179,12 @@ class MainActivity : AppCompatActivity() {
 
                         // Cooldown: skip if same QR scanned within cooldown period
                         if (content == lastScannedContent && (now - lastScanTime) < SCAN_COOLDOWN_MS) {
+                            continue
+                        }
+
+                        // Re-check global cooldown inside async callback in case
+                        // another scan was processed while ML Kit was running
+                        if ((now - lastScanTime) < GLOBAL_SCAN_COOLDOWN_MS) {
                             continue
                         }
 

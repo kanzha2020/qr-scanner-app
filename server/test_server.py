@@ -80,3 +80,59 @@ def test_post_and_list_scan(client):
     data = resp.get_json()
     assert data["count"] >= 1
     assert data["scans"][0]["qr_content"] == "https://example.com"
+
+
+# ── Duplicate detection ──────────────────────────────────────
+
+def test_duplicate_scan_rejected(client):
+    """Posting the same QR content from the same device twice quickly
+    should return a duplicate response on the second request."""
+    payload = {
+        "qr_content": "https://duplicate.example.com",
+        "latitude": 40.0,
+        "longitude": -74.0,
+        "scan_time": "2026-02-07T10:00:00Z",
+        "device_id": "DupDevice",
+    }
+    resp1 = client.post("/api/scan", json=payload)
+    assert resp1.status_code == 201
+
+    resp2 = client.post("/api/scan", json=payload)
+    data2 = resp2.get_json()
+    assert resp2.status_code == 200
+    assert data2["status"] == "duplicate"
+
+    # Only one scan should be stored
+    resp = client.get("/api/scans?device_id=DupDevice")
+    data = resp.get_json()
+    assert data["count"] == 1
+
+
+def test_different_qr_content_not_duplicate(client):
+    """Different QR content from the same device should both be accepted."""
+    base = {
+        "latitude": 40.0,
+        "longitude": -74.0,
+        "scan_time": "2026-02-07T10:00:00Z",
+        "device_id": "DiffContentDevice",
+    }
+    resp1 = client.post("/api/scan", json={**base, "qr_content": "https://a.example.com"})
+    assert resp1.status_code == 201
+
+    resp2 = client.post("/api/scan", json={**base, "qr_content": "https://b.example.com"})
+    assert resp2.status_code == 201
+
+
+def test_different_device_not_duplicate(client):
+    """Same QR content from different devices should both be accepted."""
+    base = {
+        "qr_content": "https://shared.example.com",
+        "latitude": 40.0,
+        "longitude": -74.0,
+        "scan_time": "2026-02-07T10:00:00Z",
+    }
+    resp1 = client.post("/api/scan", json={**base, "device_id": "DeviceA"})
+    assert resp1.status_code == 201
+
+    resp2 = client.post("/api/scan", json={**base, "device_id": "DeviceB"})
+    assert resp2.status_code == 201
