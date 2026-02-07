@@ -54,8 +54,9 @@ def test_index_uses_inline_map_instead_of_modal(client):
     html = resp.data.decode()
     # Inline map CSS classes should be present
     assert "inline-map" in html
-    assert "inline-map-coords" in html
     assert "inline-map-link" in html
+    # Numerical coordinates should not be shown
+    assert "inline-map-coords" not in html
     # The old modal elements should be removed
     assert "map-modal-overlay" not in html
     assert "map-modal-close" not in html
