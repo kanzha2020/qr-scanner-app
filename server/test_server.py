@@ -123,6 +123,34 @@ def test_different_qr_content_not_duplicate(client):
     assert resp2.status_code == 201
 
 
+def test_scans_returned_in_chronological_order(client):
+    """Scans should be listed newest-first by scan_time, regardless of insert order."""
+    base = {
+        "latitude": 40.0,
+        "longitude": -74.0,
+        "device_id": "OrderDevice",
+    }
+    # Insert older scan first
+    resp1 = client.post("/api/scan", json={**base, "qr_content": "older", "scan_time": "2026-02-06T10:00:00Z"})
+    assert resp1.status_code == 201
+
+    # Insert newer scan second
+    resp2 = client.post("/api/scan", json={**base, "qr_content": "newer", "scan_time": "2026-02-07T10:00:00Z"})
+    assert resp2.status_code == 201
+
+    # Insert middle scan last (out of order by insertion)
+    resp3 = client.post("/api/scan", json={**base, "qr_content": "middle", "scan_time": "2026-02-06T18:00:00Z"})
+    assert resp3.status_code == 201
+
+    resp = client.get("/api/scans?device_id=OrderDevice")
+    data = resp.get_json()
+    assert data["count"] == 3
+    # Should be ordered newest scan_time first
+    assert data["scans"][0]["qr_content"] == "newer"
+    assert data["scans"][1]["qr_content"] == "middle"
+    assert data["scans"][2]["qr_content"] == "older"
+
+
 def test_different_device_not_duplicate(client):
     """Same QR content from different devices should both be accepted."""
     base = {
