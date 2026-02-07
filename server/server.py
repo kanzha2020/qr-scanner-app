@@ -21,7 +21,7 @@ import io
 import sqlite3
 import os
 from datetime import datetime
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -201,23 +201,8 @@ def health_check():
 
 @app.route("/", methods=["GET"])
 def index():
-    """Simple landing page."""
-    return """
-    <html>
-    <head><title>QR Scanner Server</title></head>
-    <body style="font-family: sans-serif; max-width: 600px; margin: 50px auto;">
-        <h1>📱 QR Scanner Server</h1>
-        <p>Server is running. API endpoints:</p>
-        <ul>
-            <li><code>POST /api/scan</code> – Upload scan data</li>
-            <li><code>GET /api/scans</code> – List all scans</li>
-            <li><code>GET /api/scan/&lt;id&gt;</code> – Get specific scan</li>
-            <li><code>GET /api/export/csv</code> – Export as CSV</li>
-            <li><code>GET /api/health</code> – Health check</li>
-        </ul>
-    </body>
-    </html>
-    """
+    """Front-end dashboard for viewing QR scan data."""
+    return render_template("index.html")
 
 
 # ─── Entry Point ──────────────────────────────────────────────
