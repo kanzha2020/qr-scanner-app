@@ -248,11 +248,8 @@
                 return;
             }
 
-            // Update stats
-            var devices = {};
-            scans.forEach(function(s) { devices[s.device_id] = true; });
-
-            if (!deviceId && currentPage === 0 && !search) {
+            // Update latest-scan stat from current results
+            if (scans.length > 0) {
                 document.getElementById("latest-scan").textContent =
                     new Date(scans[0].scan_time).toLocaleString();
             }
