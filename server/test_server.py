@@ -80,3 +80,32 @@ def test_post_and_list_scan(client):
     data = resp.get_json()
     assert data["count"] >= 1
     assert data["scans"][0]["qr_content"] == "https://example.com"
+
+
+# ── Map modal tests ──────────────────────────────────────────
+
+def test_index_contains_map_modal(client):
+    """The dashboard should contain the map modal elements."""
+    resp = client.get("/")
+    html = resp.data.decode()
+    assert "map-modal-overlay" in html
+    assert "map-iframe" in html
+    assert "map-coords" in html
+    assert "map-link" in html
+
+
+def test_index_contains_map_functions(client):
+    """The dashboard should contain the showMap and closeMapModal functions."""
+    resp = client.get("/")
+    html = resp.data.decode()
+    assert "function showMap(" in html
+    assert "function closeMapModal(" in html
+    assert "maps.google.com/maps" in html
+
+
+def test_index_location_column_has_map_link(client):
+    """The location column in the scan table should use the location-link class."""
+    resp = client.get("/")
+    html = resp.data.decode()
+    assert "location-link" in html
+    assert "showMap(" in html
