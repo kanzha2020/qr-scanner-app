@@ -310,56 +310,24 @@ class MainActivity : AppCompatActivity() {
         runOnUiThread {
             val lat = scanResult.latitude
             val lng = scanResult.longitude
-            val mapUrl = "https://maps.google.com/maps?q=$lat,$lng&z=15&output=embed"
-            val mapsIntentUrl = "https://www.google.com/maps?q=$lat,$lng"
 
-            val webView = android.webkit.WebView(this).apply {
-                layoutParams = android.view.ViewGroup.LayoutParams(
-                    android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                    600
-                )
-                settings.javaScriptEnabled = true
-                settings.domStorageEnabled = false
-                settings.allowFileAccess = false
-                loadUrl(mapUrl)
-            }
-
-            val container = android.widget.LinearLayout(this).apply {
-                orientation = android.widget.LinearLayout.VERTICAL
-                setPadding(48, 24, 48, 0)
-
-                addView(android.widget.TextView(this@MainActivity).apply {
-                    text = """
-                        QR Content: ${scanResult.qrContent}
-                        
-                        Location: ${String.format("%.6f", lat)}, ${String.format("%.6f", lng)}
-                        
-                        Time: ${scanResult.scanTime}
-                        
-                        Server ID: ${response?.id ?: "N/A"}
-                    """.trimIndent()
-                    textSize = 14f
-                })
-
-                addView(android.widget.TextView(this@MainActivity).apply {
-                    text = "\n📍 Location Map:"
-                    textSize = 14f
-                    setTypeface(null, android.graphics.Typeface.BOLD)
-                })
-
-                addView(webView)
-            }
+            val message = """
+                QR Content: ${scanResult.qrContent}
+                
+                Location: ${String.format("%.6f", lat)}, ${String.format("%.6f", lng)}
+                
+                Time: ${scanResult.scanTime}
+                
+                Server ID: ${response?.id ?: "N/A"}
+                
+                📍 View location on the QR Scanner Dashboard.
+            """.trimIndent()
 
             AlertDialog.Builder(this)
                 .setTitle("✅ Upload Successful")
-                .setView(container)
+                .setMessage(message)
                 .setPositiveButton("OK") { dialog, _ ->
                     dialog.dismiss()
-                }
-                .setNeutralButton("Open in Maps") { _, _ ->
-                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW,
-                        android.net.Uri.parse(mapsIntentUrl))
-                    startActivity(intent)
                 }
                 .setCancelable(true)
                 .show()
