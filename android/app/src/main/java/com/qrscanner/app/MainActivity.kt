@@ -305,6 +305,8 @@ class MainActivity : AppCompatActivity() {
                     600
                 )
                 settings.javaScriptEnabled = true
+                settings.domStorageEnabled = false
+                settings.allowFileAccess = false
                 loadUrl(mapUrl)
             }
 
