@@ -80,6 +80,8 @@
         .btn-primary:hover { background: #1558b0; }
         .btn-secondary { background: #e5e7eb; color: #333; }
         .btn-secondary:hover { background: #d1d5db; }
+        .btn-danger { background: #ef4444; color: #fff; }
+        .btn-danger:hover { background: #dc2626; }
 
         table {
             width: 100%;
@@ -190,6 +192,7 @@
         </select>
         <button class="btn btn-primary" onclick="loadScans()">Refresh</button>
         <a href="/api/export/csv" class="btn btn-secondary">⬇ Export CSV</a>
+        <button class="btn btn-danger" id="clear-btn" onclick="clearScans()">🗑 Clear All</button>
     </div>
 
     <!-- Table -->
@@ -314,6 +317,25 @@
         var div = document.createElement("div");
         div.appendChild(document.createTextNode(text));
         return div.innerHTML;
+    }
+
+    async function clearScans() {
+        if (!confirm("Are you sure you want to clear all scan records?")) return;
+        try {
+            const res = await fetch("/api/scans", { method: "DELETE" });
+            const data = await res.json();
+            if (data.status === "success") {
+                currentPage = 0;
+                loadScans();
+                checkHealth();
+                // Reset device filter
+                var select = document.getElementById("device-filter");
+                select.innerHTML = '<option value="">All Devices</option>';
+                document.getElementById("device-count").textContent = "0";
+            }
+        } catch (err) {
+            alert("Failed to clear scans.");
+        }
     }
 
     // Search on Enter key

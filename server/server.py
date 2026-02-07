@@ -190,6 +190,16 @@ def export_csv():
     )
 
 
+@app.route("/api/scans", methods=["DELETE"])
+def clear_scans():
+    """Delete all scan records."""
+    conn = get_db()
+    conn.execute("DELETE FROM scans")
+    conn.commit()
+    conn.close()
+    return jsonify({"status": "success", "message": "All scans cleared"})
+
+
 @app.route("/api/health", methods=["GET"])
 def health_check():
     """Health check endpoint."""

@@ -80,3 +80,32 @@ def test_post_and_list_scan(client):
     data = resp.get_json()
     assert data["count"] >= 1
     assert data["scans"][0]["qr_content"] == "https://example.com"
+
+
+def test_clear_scans(client):
+    """DELETE /api/scans should remove all scan records."""
+    payload = {
+        "qr_content": "https://example.com",
+        "latitude": 37.77,
+        "longitude": -122.42,
+        "scan_time": "2026-02-06T14:30:00Z",
+        "device_id": "TestDevice",
+    }
+    client.post("/api/scan", json=payload)
+
+    resp = client.delete("/api/scans")
+    assert resp.status_code == 200
+    data = resp.get_json()
+    assert data["status"] == "success"
+
+    resp = client.get("/api/scans")
+    data = resp.get_json()
+    assert data["count"] == 0
+
+
+def test_index_contains_clear_button(client):
+    """The dashboard should contain the Clear All button."""
+    resp = client.get("/")
+    html = resp.data.decode()
+    assert "clear-btn" in html
+    assert "clearScans()" in html
