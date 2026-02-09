@@ -167,6 +167,18 @@ class MainActivity : AppCompatActivity() {
         val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
         val scanner = BarcodeScanning.getClient()
 
+        // Capture image dimensions for coordinate mapping
+        val imageWidth: Int
+        val imageHeight: Int
+        val rotation = imageProxy.imageInfo.rotationDegrees
+        if (rotation == 90 || rotation == 270) {
+            imageWidth = mediaImage.height
+            imageHeight = mediaImage.width
+        } else {
+            imageWidth = mediaImage.width
+            imageHeight = mediaImage.height
+        }
+
         scanner.process(image)
             .addOnSuccessListener { barcodes ->
                 for (barcode in barcodes) {
@@ -175,6 +187,12 @@ class MainActivity : AppCompatActivity() {
                         barcode.rawValue != null
                     ) {
                         val content = barcode.rawValue ?: continue
+
+                        // Filter: only accept barcodes within the scan frame region
+                        if (!isBarcodeInScanFrame(barcode, imageWidth, imageHeight)) {
+                            continue
+                        }
+
                         val now = System.currentTimeMillis()
 
                         // Cooldown: skip if same QR scanned within cooldown period
@@ -211,6 +229,35 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 imageProxy.close()
             }
+    }
+
+    /**
+     * Checks whether a detected barcode's bounding box center falls within the
+     * scan frame region of the overlay. Maps barcode coordinates from image space
+     * to the overlay view's coordinate space.
+     */
+    private fun isBarcodeInScanFrame(barcode: Barcode, imageWidth: Int, imageHeight: Int): Boolean {
+        val boundingBox = barcode.boundingBox ?: return false
+        val overlay = binding.scanOverlay
+        val overlayWidth = overlay.width
+        val overlayHeight = overlay.height
+
+        if (overlayWidth == 0 || overlayHeight == 0 || imageWidth == 0 || imageHeight == 0) {
+            return true // Allow scan if dimensions not yet available
+        }
+
+        val frameRect = overlay.getFrameRect()
+        if (frameRect.isEmpty) {
+            return true // Allow scan if frame not yet drawn
+        }
+
+        // Map barcode center from image coordinates to overlay coordinates
+        val scaleX = overlayWidth.toFloat() / imageWidth.toFloat()
+        val scaleY = overlayHeight.toFloat() / imageHeight.toFloat()
+        val barcodeCenterX = boundingBox.centerX() * scaleX
+        val barcodeCenterY = boundingBox.centerY() * scaleY
+
+        return frameRect.contains(barcodeCenterX, barcodeCenterY)
     }
 
     // ─── QR Detected → Get Location → Upload ────────────────────
