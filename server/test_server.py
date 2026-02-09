@@ -182,3 +182,35 @@ def test_different_device_not_duplicate(client):
 
     resp2 = client.post("/api/scan", json={**base, "device_id": "DeviceB"})
     assert resp2.status_code == 201
+
+
+def test_same_qr_accepted_after_dedup_window(client):
+    """Same QR content from the same device should be accepted after the
+    deduplication window (1 second) has elapsed."""
+    import time
+
+    payload = {
+        "qr_content": "https://rescan.example.com",
+        "latitude": 40.0,
+        "longitude": -74.0,
+        "scan_time": "2026-02-07T10:00:00Z",
+        "device_id": "RescanDevice",
+    }
+    resp1 = client.post("/api/scan", json=payload)
+    assert resp1.status_code == 201
+
+    # Wait for the dedup window to pass (1-second window at second-level
+    # granularity may need up to 2 seconds to reliably expire)
+    time.sleep(2)
+
+    # Same QR content with a different timestamp should now be accepted
+    payload2 = {**payload, "scan_time": "2026-02-07T10:00:05Z"}
+    resp2 = client.post("/api/scan", json=payload2)
+    assert resp2.status_code == 201
+    data2 = resp2.get_json()
+    assert data2["status"] == "success"
+
+    # Both scans should be stored
+    resp = client.get("/api/scans?device_id=RescanDevice")
+    data = resp.get_json()
+    assert data["count"] == 2

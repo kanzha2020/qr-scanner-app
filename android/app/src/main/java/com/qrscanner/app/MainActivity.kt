@@ -50,8 +50,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "QRScanner"
         private const val PERMISSION_REQUEST_CODE = 100
-        private const val SCAN_COOLDOWN_MS = 3000L  // 3-second cooldown between same QR scans
-        private const val GLOBAL_SCAN_COOLDOWN_MS = 1500L  // 1.5-second cooldown between any scans
+        private const val SCAN_COOLDOWN_MS = 1000L  // 1-second cooldown between same QR scans
+        private const val GLOBAL_SCAN_COOLDOWN_MS = 500L  // 0.5-second cooldown between any scans
 
         private val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,

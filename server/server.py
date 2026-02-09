@@ -32,7 +32,7 @@ CORS(app)  # Allow cross-origin requests
 DB_PATH = os.environ.get("DB_PATH", "qr_scans.db")
 
 # Server-side duplicate detection window (in seconds)
-DUPLICATE_WINDOW_SECONDS = int(os.environ.get("DUPLICATE_WINDOW_SECONDS", 5))
+DUPLICATE_WINDOW_SECONDS = int(os.environ.get("DUPLICATE_WINDOW_SECONDS", 1))
 
 
 def get_db():
@@ -133,7 +133,7 @@ def upload_scan():
             float(data["longitude"]),
             data["scan_time"],
             device_id,
-            datetime.utcnow().isoformat() + "Z",
+            datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
             request.remote_addr,
         ),
     )
