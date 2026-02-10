@@ -11,6 +11,21 @@ services:
     environment:
       - PORT=5000
       - DB_PATH=/app/data/qr_scans.db
+      - ENABLE_MLFLOW=true
+      - MLFLOW_TRACKING_URI=http://mlflow:5001
+      - MLFLOW_EXPERIMENT=qr-scanner
+    depends_on:
+      - mlflow
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.22.4
+    ports:
+      - "5001:5001"
+    volumes:
+      - mlflow_data:/mlflow
+    restart: unless-stopped
+    command: mlflow server --host 0.0.0.0 --port 5001 --backend-store-uri sqlite:///mlflow/mlflow.db --default-artifact-root /mlflow/artifacts
 
 volumes:
   qr_data:
+  mlflow_data:
