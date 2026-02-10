@@ -100,6 +100,7 @@ See [`android/README.md`](android/README.md) for setup instructions. In short:
 qr-scanner-app/
 ├── server/          # Python Flask server & web dashboard
 │   ├── server.py
+│   ├── mlflow_tracking.py
 │   ├── requirements.txt
 │   ├── Dockerfile
 │   └── templates/
@@ -108,3 +109,38 @@ qr-scanner-app/
 ├── docker-compose.yml
 └── README.md
 ```
+
+## Experiment Tracking with MLflow
+
+The server integrates with [MLflow](https://mlflow.org/) to track scan metrics (location, device, QR content) as experiment runs.
+
+### Enabling MLflow
+
+Set the `ENABLE_MLFLOW` environment variable to `true`:
+
+```bash
+ENABLE_MLFLOW=true python server.py
+```
+
+You can also configure the tracking URI and experiment name:
+
+| Variable | Default | Description |
+|---|---|---|
+| `ENABLE_MLFLOW` | `false` | Set to `true` to enable tracking |
+| `MLFLOW_TRACKING_URI` | `mlruns` | MLflow tracking server URL or local directory |
+| `MLFLOW_EXPERIMENT` | `qr-scanner` | Experiment name |
+
+### Running with Docker Compose
+
+`docker-compose up` starts both the QR scanner server and an MLflow tracking server. The MLflow UI is available at **http://localhost:5001**.
+
+### Running MLflow UI Locally
+
+If running the server locally with file-based tracking:
+
+```bash
+pip install mlflow
+mlflow ui --backend-store-uri mlruns --port 5001
+```
+
+Then open **http://localhost:5001** to view experiment runs.

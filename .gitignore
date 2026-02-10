@@ -219,3 +219,6 @@ android/local.properties
 
 # SQLite database files
 *.db
+
+# MLflow local tracking data
+mlruns/

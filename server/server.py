@@ -23,6 +23,7 @@ import os
 from datetime import datetime
 from flask import Flask, request, jsonify, Response, render_template
 from flask_cors import CORS
+from mlflow_tracking import log_scan
 
 app = Flask(__name__)
 CORS(app)  # Allow cross-origin requests
@@ -142,6 +143,16 @@ def upload_scan():
     conn.close()
 
     print(f"[+] Scan #{scan_id}: {data['qr_content']} @ ({data['latitude']}, {data['longitude']})")
+
+    # Log the scan to MLflow (non-blocking; failures are logged but ignored)
+    log_scan(
+        scan_id=scan_id,
+        qr_content=data["qr_content"],
+        latitude=float(data["latitude"]),
+        longitude=float(data["longitude"]),
+        device_id=device_id,
+        scan_time=data["scan_time"],
+    )
 
     return jsonify({
         "status": "success",
