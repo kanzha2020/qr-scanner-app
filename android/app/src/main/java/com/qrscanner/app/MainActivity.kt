@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         private const val PERMISSION_REQUEST_CODE = 100
         private const val SCAN_COOLDOWN_MS = 1000L  // 1-second cooldown between same QR scans
         private const val GLOBAL_SCAN_COOLDOWN_MS = 500L  // 0.5-second cooldown between any scans
+        private const val DIALOG_AUTO_DISMISS_MS = 2000L  // Auto-dismiss confirmation dialog after 2 seconds
 
         private val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,
@@ -361,14 +364,29 @@ class MainActivity : AppCompatActivity() {
                 Server ID: ${response?.id ?: "N/A"}
             """.trimIndent()
 
-            AlertDialog.Builder(this)
+            val dialog = AlertDialog.Builder(this)
                 .setTitle("✅ Upload Successful")
                 .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
+                .setPositiveButton("OK") { d, _ ->
+                    d.dismiss()
                 }
                 .setCancelable(true)
                 .show()
+
+            // Auto-dismiss the dialog after a short delay
+            val handler = Handler(Looper.getMainLooper())
+            val dismissRunnable = Runnable {
+                if (dialog.isShowing) {
+                    dialog.dismiss()
+                }
+            }
+
+            // Cancel the auto-dismiss if the user manually dismisses the dialog
+            dialog.setOnDismissListener {
+                handler.removeCallbacks(dismissRunnable)
+            }
+
+            handler.postDelayed(dismissRunnable, DIALOG_AUTO_DISMISS_MS)
         }
     }
 
