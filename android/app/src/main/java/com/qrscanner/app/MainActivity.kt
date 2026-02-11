@@ -167,9 +167,7 @@ class MainActivity : AppCompatActivity() {
 
         val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
         val options = BarcodeScannerOptions.Builder()
-            .setBarcodeFormats(
-                Barcode.FORMAT_ALL_FORMATS
-            )
+            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
             .build()
         val scanner = BarcodeScanning.getClient(options)
 
