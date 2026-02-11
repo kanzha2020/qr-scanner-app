@@ -32,7 +32,8 @@ class ScannerOverlayView @JvmOverloads constructor(
     private val framePath = Path()
     private val maskPath = Path()
 
-    private val frameSizeDp = 260f
+    private val frameWidthDp = 300f
+    private val frameHeightDp = 200f
     private val cornerRadiusDp = 16f
 
     /** Returns the scan frame rectangle in view coordinates. */
@@ -42,14 +43,15 @@ class ScannerOverlayView @JvmOverloads constructor(
         super.onDraw(canvas)
 
         val density = resources.displayMetrics.density
-        val frameSizePx = frameSizeDp * density
+        val frameWidthPx = frameWidthDp * density
+        val frameHeightPx = frameHeightDp * density
         val cornerRadiusPx = cornerRadiusDp * density
 
         // Center the frame in this view
-        val left = (width - frameSizePx) / 2f
-        val top = (height - frameSizePx) / 2f
-        val right = left + frameSizePx
-        val bottom = top + frameSizePx
+        val left = (width - frameWidthPx) / 2f
+        val top = (height - frameHeightPx) / 2f
+        val right = left + frameWidthPx
+        val bottom = top + frameHeightPx
         frameRect.set(left, top, right, bottom)
 
         // Build the cutout path (rounded rectangle)
