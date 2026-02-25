@@ -93,18 +93,3 @@ See [`android/README.md`](android/README.md) for setup instructions. In short:
 | GET | `/api/scan/<id>` | Get a scan by ID |
 | GET | `/api/export/csv` | Download all scans as CSV |
 | GET | `/api/health` | Health check |
-
-## Project Structure
-
-```
-qr-scanner-app/
-├── server/          # Python Flask server & web dashboard
-│   ├── server.py
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── templates/
-│       └── index.html
-├── android/         # Android app (Kotlin)
-├── docker-compose.yml
-└── README.md
-```

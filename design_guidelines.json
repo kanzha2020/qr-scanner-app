@@ -1,0 +1,160 @@
+{
+  "identity": {
+    "name": "0middle",
+    "mission": "Empower farmers and consumers with a transparent, infrastructure-only marketplace.",
+    "tone": "Trustworthy, Transparent, Earthy, Authentic, Simple",
+    "visual_mood": "Organic, Clean, Farm-to-Table, Minimalist but warm",
+    "theme_mode": "light"
+  },
+  "typography": {
+    "fonts": {
+      "heading": "Playfair Display, serif",
+      "body": "Manrope, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "weights": {
+      "heading": "font-semibold or font-bold",
+      "body": "font-normal or font-medium"
+    },
+    "usage": {
+      "h1": "text-4xl md:text-5xl font-bold tracking-tight text-primary",
+      "h2": "text-3xl md:text-4xl font-semibold tracking-tight text-primary/90",
+      "h3": "text-2xl font-medium text-foreground",
+      "body": "text-base leading-relaxed text-muted-foreground",
+      "caption": "text-sm text-muted-foreground/80"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": "#FAF9F6",
+      "foreground": "#1A1A1A",
+      "primary": "#2F5233",
+      "primary_foreground": "#FFFFFF",
+      "secondary": "#B5651D",
+      "secondary_foreground": "#FFFFFF",
+      "muted": "#F0EFEA",
+      "muted_foreground": "#6B7280",
+      "accent": "#D4A373",
+      "accent_foreground": "#1A1A1A",
+      "card": "#FFFFFF",
+      "card_foreground": "#1A1A1A",
+      "border": "#E5E7EB",
+      "input": "#E5E7EB",
+      "ring": "#2F5233"
+    },
+    "tailwind_mapping": {
+      "--background": "40 14% 97%",
+      "--foreground": "0 0% 10%",
+      "--primary": "127 27% 25%",
+      "--primary-foreground": "0 0% 100%",
+      "--secondary": "28 72% 41%",
+      "--secondary-foreground": "0 0% 100%",
+      "--muted": "40 10% 93%",
+      "--muted-foreground": "220 9% 46%",
+      "--accent": "30 52% 64%",
+      "--accent-foreground": "0 0% 10%",
+      "--card": "0 0% 100%",
+      "--card-foreground": "0 0% 10%",
+      "--border": "220 13% 91%",
+      "--input": "220 13% 91%",
+      "--ring": "127 27% 25%"
+    }
+  },
+  "spacing": {
+    "container_padding": "p-4 md:p-8 lg:p-12",
+    "section_gap": "gap-8 md:gap-12",
+    "element_gap": "gap-4",
+    "border_radius": "rounded-xl md:rounded-2xl"
+  },
+  "components": {
+    "buttons": {
+      "default": "rounded-full font-medium transition-all hover:shadow-md active:scale-95",
+      "primary": "bg-primary text-primary-foreground hover:bg-primary/90",
+      "secondary": "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+      "outline": "border-2 border-primary text-primary hover:bg-primary/5"
+    },
+    "cards": {
+      "style": "bg-card text-card-foreground rounded-xl border border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300",
+      "padding": "p-6"
+    },
+    "inputs": {
+      "style": "rounded-lg border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    }
+  },
+  "images": {
+    "farmers": [
+      {
+        "url": "https://images.unsplash.com/photo-1595956481935-a9e254951d49?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBmYXJtZXIlMjBwb3J0cmFpdCUyMGhhcHB5fGVufDB8fHx8MTc2ODA4MzMxMHww&ixlib=rb-4.1.0&q=85",
+        "alt": "Happy Indian farmer in plaid shirt",
+        "category": "farmer_profile"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1699860777054-13e8d1d6245a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBmYXJtZXIlMjBwb3J0cmFpdCUyMGhhcHB5fGVufDB8fHx8MTc2ODA4MzMxMHww&ixlib=rb-4.1.0&q=85",
+        "alt": "Tea worker with scarf",
+        "category": "farmer_profile"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1628492058844-589eb5dc6a35?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjBmYXJtZXIlMjBwb3J0cmFpdCUyMGhhcHB5fGVufDB8fHx8MTc2ODA4MzMxMHww&ixlib=rb-4.1.0&q=85",
+        "alt": "Village boy in field",
+        "category": "farmer_profile"
+      }
+    ],
+    "products": [
+      {
+        "url": "https://images.unsplash.com/photo-1631021967261-c57ee4dfa9bb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwxfHxmcmVzaCUyMHZlZ2V0YWJsZXMlMjBiYXNrZXQlMjB3b29kZW4lMjB0YWJsZXxlbnwwfHx8fDE3NjgwODMzMTF8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Fresh vegetables in basket",
+        "category": "product_listing"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1723155182094-af2f63472d0b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBzcGljZXMlMjBtYXJrZXR8ZW58MHx8fHwxNzY4MDgzMzEzfDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Dried red chili peppers in sack",
+        "category": "product_listing"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1668885309844-5bb50f7c2e61?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBzcGljZXMlMjBtYXJrZXR8ZW58MHx8fHwxNzY4MDgzMzEzfDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Pile of corn",
+        "category": "product_listing"
+      }
+    ],
+    "hero": [
+      {
+        "url": "https://images.unsplash.com/photo-1594051769596-843cb33e04f4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxmYXJtJTIwbGFuZHNjYXBlJTIwaW5kaWF8ZW58MHx8fHwxNzY4MDgzMzE0fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Green farm landscape India",
+        "category": "hero_background"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1709693298800-7e35fc0c8a2a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwzfHxmYXJtJTIwbGFuZHNjYXBlJTIwaW5kaWF8ZW58MHx8fHwxNzY4MDgzMzE0fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Wheat harvesting",
+        "category": "hero_background"
+      }
+    ]
+  },
+  "icons": {
+    "primary_library": "lucide-react",
+    "secondary_library": "@phosphor-icons/react",
+    "style": "Stroke width 1.5px or 2px, rounded caps"
+  },
+  "motion": {
+    "transitions": "transition-all duration-300 ease-in-out",
+    "hover_effects": "hover:-translate-y-1 hover:shadow-lg",
+    "page_transition": "initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}"
+  },
+  "universal_guidelines": [
+    "Do not use gradients for backgrounds; use solid earth tones or subtle textures.",
+    "Ensure high contrast for text readability (WCAG AA).",
+    "Use generous padding (p-6, p-8) to create breathing room.",
+    "Avoid 'tech' blues and purples; stick to the earth palette.",
+    "Mobile-first design is critical.",
+    "All interactive elements must have data-testid attributes."
+  ],
+  "instructions_to_main_agent": [
+    "1. Update /app/frontend/src/index.css with the new color palette variables.",
+    "2. Install necessary fonts (Playfair Display, Manrope) via Google Fonts import in index.css.",
+    "3. Create a 'TransparentPricing' component that visualizes the cost breakdown clearly.",
+    "4. Build the 'FarmerProfile' and 'ProductListing' components using the provided image URLs.",
+    "5. Implement the 'RoleSelection' screen with clear, large touch targets.",
+    "6. Ensure the 'OrderTracking' flow uses a simple vertical timeline.",
+    "7. Use 'sonner' for all toast notifications.",
+    "8. Mock all backend calls; no real API integration required."
+  ]
+}

@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 40 14% 97%;
+        --foreground: 0 0% 10%;
+        --card: 0 0% 100%;
+        --card-foreground: 0 0% 10%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 0 0% 10%;
+        --primary: 127 27% 25%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 28 72% 41%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 40 10% 93%;
+        --muted-foreground: 220 9% 46%;
+        --accent: 30 52% 64%;
+        --accent-foreground: 0 0% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 220 13% 91%;
+        --input: 220 13% 91%;
+        --ring: 127 27% 25%;
+        --radius: 0.75rem;
+        --chart-1: 127 27% 25%;
+        --chart-2: 28 72% 41%;
+        --chart-3: 30 52% 64%;
+        --chart-4: 40 14% 97%;
+        --chart-5: 220 9% 46%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Manrope', sans-serif;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+    }
+}
+
+@layer components {
+    .heading-1 {
+        @apply text-4xl md:text-5xl font-bold tracking-tight text-primary;
+        font-family: 'Playfair Display', serif;
+    }
+    .heading-2 {
+        @apply text-3xl md:text-4xl font-semibold tracking-tight;
+        font-family: 'Playfair Display', serif;
+    }
+    .heading-3 {
+        @apply text-2xl font-medium;
+        font-family: 'Playfair Display', serif;
+    }
+    .body-text {
+        @apply text-base leading-relaxed text-muted-foreground;
+    }
+    .caption-text {
+        @apply text-sm text-muted-foreground/80;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+}
+
+/* Page transitions */
+.page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+/* Card hover effect */
+.card-hover {
+    @apply transition-all duration-300;
+}
+.card-hover:hover {
+    @apply -translate-y-1 shadow-lg;
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+}

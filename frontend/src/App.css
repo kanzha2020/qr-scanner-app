@@ -1,0 +1,72 @@
+/* App specific styles */
+.app-container {
+    min-height: 100vh;
+}
+
+/* Hero section gradient overlay */
+.hero-overlay {
+    background: linear-gradient(to bottom, 
+        rgba(47, 82, 51, 0.1) 0%, 
+        rgba(250, 249, 246, 1) 100%
+    );
+}
+
+/* Product card image */
+.product-image {
+    @apply w-full h-48 object-cover rounded-t-xl;
+}
+
+/* Farmer avatar */
+.farmer-avatar {
+    @apply w-12 h-12 rounded-full object-cover border-2 border-primary/20;
+}
+
+/* Timeline connector */
+.timeline-connector {
+    @apply absolute left-4 top-8 bottom-0 w-0.5 bg-primary/20;
+}
+
+/* QR Code placeholder */
+.qr-placeholder {
+    @apply w-24 h-24 bg-muted rounded-lg flex items-center justify-center;
+    background-image: 
+        linear-gradient(45deg, hsl(var(--primary)/0.1) 25%, transparent 25%),
+        linear-gradient(-45deg, hsl(var(--primary)/0.1) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, hsl(var(--primary)/0.1) 75%),
+        linear-gradient(-45deg, transparent 75%, hsl(var(--primary)/0.1) 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+
+/* Status badge colors */
+.status-placed { @apply bg-amber-100 text-amber-800; }
+.status-packed { @apply bg-blue-100 text-blue-800; }
+.status-shipped { @apply bg-purple-100 text-purple-800; }
+.status-delivered { @apply bg-green-100 text-green-800; }
+
+/* Price breakdown */
+.price-row {
+    @apply flex justify-between items-center py-2;
+}
+.price-row:not(:last-child) {
+    @apply border-b border-border/50;
+}
+.price-total {
+    @apply font-bold text-lg text-primary;
+}
+
+/* Input focus ring */
+input:focus, select:focus, textarea:focus {
+    @apply ring-2 ring-primary/30 outline-none;
+}
+
+/* Button pill style */
+.btn-pill {
+    @apply rounded-full px-6 py-2 font-medium transition-all duration-300;
+}
+.btn-pill:hover {
+    @apply shadow-md;
+}
+.btn-pill:active {
+    @apply scale-95;
+}
