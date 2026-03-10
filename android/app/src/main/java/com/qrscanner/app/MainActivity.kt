@@ -25,6 +25,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.qrscanner.app.databinding.ActivityMainBinding
@@ -48,9 +49,9 @@ class MainActivity : AppCompatActivity() {
     private var lastScanTime = 0L
 
     companion object {
-        private const val TAG = "QRScanner"
+        private const val TAG = "BarcodeScanner"
         private const val PERMISSION_REQUEST_CODE = 100
-        private const val SCAN_COOLDOWN_MS = 1000L  // 1-second cooldown between same QR scans
+        private const val SCAN_COOLDOWN_MS = 1000L  // 1-second cooldown between same barcode scans
         private const val GLOBAL_SCAN_COOLDOWN_MS = 500L  // 0.5-second cooldown between any scans
 
         private val REQUIRED_PERMISSIONS = arrayOf(
@@ -105,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // ─── Camera & QR Scanning ────────────────────────────────────
+    // ─── Camera & Barcode Scanning ─────────────────────────────
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -118,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                 .build()
                 .also { it.setSurfaceProvider(binding.previewView.surfaceProvider) }
 
-            // Image analysis use case for QR scanning
+            // Image analysis use case for barcode scanning (1D + 2D)
             val imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
@@ -165,7 +166,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-        val scanner = BarcodeScanning.getClient()
+        val options = BarcodeScannerOptions.Builder()
+            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
+            .build()
+        val scanner = BarcodeScanning.getClient(options)
 
         // Capture image dimensions for coordinate mapping
         val imageWidth: Int
@@ -195,7 +199,7 @@ class MainActivity : AppCompatActivity() {
 
                         val now = System.currentTimeMillis()
 
-                        // Cooldown: skip if same QR scanned within cooldown period
+                        // Cooldown: skip if same barcode scanned within cooldown period
                         if (content == lastScannedContent && (now - lastScanTime) < SCAN_COOLDOWN_MS) {
                             continue
                         }
@@ -211,15 +215,15 @@ class MainActivity : AppCompatActivity() {
                         isProcessing = true
 
                         runOnUiThread {
-                            binding.statusText.text = "QR Detected! Getting location..."
+                            binding.statusText.text = "Barcode Detected! Getting location..."
                             binding.statusIndicator.setBackgroundColor(
                                 ContextCompat.getColor(this, android.R.color.holo_orange_dark)
                             )
                             vibrateDevice()
                         }
 
-                        handleQrDetected(content)
-                        break  // Process only the first QR code found
+                        handleBarcodeDetected(content)
+                        break  // Process only the first barcode found
                     }
                 }
             }
@@ -260,9 +264,9 @@ class MainActivity : AppCompatActivity() {
         return frameRect.contains(barcodeCenterX, barcodeCenterY)
     }
 
-    // ─── QR Detected → Get Location → Upload ────────────────────
+    // ─── Barcode Detected → Get Location → Upload ─────────────
 
-    private fun handleQrDetected(qrContent: String) {
+    private fun handleBarcodeDetected(barcodeContent: String) {
         getLocation { location ->
             val scanTime = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
                 timeZone = TimeZone.getTimeZone("UTC")
@@ -271,7 +275,7 @@ class MainActivity : AppCompatActivity() {
             val deviceId = getCustomDeviceId()
 
             val scanResult = ScanResult(
-                qrContent = qrContent,
+                qrContent = barcodeContent,
                 latitude = location?.latitude ?: 0.0,
                 longitude = location?.longitude ?: 0.0,
                 scanTime = scanTime,
